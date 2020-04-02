@@ -1,0 +1,47 @@
+DB:
+Customers (id, meno, priezvisko, adresa (prerobit), kontakt (rozdelit na mail a cislo), poznamka)
+Orders (id, customer_id, datum, zaplatena_zaloha, celkova_cena, poznamka, cislo_zosita, status)
+reports? (id, date, meno, title, text)
+Users(id, meno, password, status (permissie))
+
+
+Users:
+addUser (name, password, permissions)
+getALlUsers (vsetko)
+getUser
+userVerify (na zaklade permissii)
+editUser (nove udaje of usera)
+deleteUser (id)
+
+Customers:
+Add
+Delete
+edit
+getall
+gethistory
+getOne
+getTop (najviac objednavok)
+
+Orders:
+add
+delete
+edit
+changeStatus
+getOrder
+getAll
+getStatusSum (zrata vsetky vybavene a nevybavene)
+
+Backups:
+createBackup
+getBackupsList
+backupUpload
+
+Reports:
+sendReport
+...
+
+
+create table orders (order_id int primary key auto_increment, customer_id int not null, order_date datetime, paid_upfront int default 0, total_price int
+default 0, note text default null, book_num int default null, status int default
+ 0, foreign key (customer_id) references customers(customer_id));
+

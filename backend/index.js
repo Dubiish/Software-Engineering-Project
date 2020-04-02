@@ -22,8 +22,9 @@ app.use('/customer', require('./routes/Customer'));
 app.use('/order', require('./routes/Order'));
 app.use('/user', require('./routes/User'));
 app.use('/log', require('./routes/Log'));
+//app.use('/backup', require('./routes/Backups'));
 
-app.get('/data', (req, res) => {
+/* app.get('/data', (req, res) => {
     connection.query("SELECT * FROM people", (err, result, fields) => {
         if(err) throw err;
         console.log(result);
@@ -32,9 +33,9 @@ app.get('/data', (req, res) => {
             result: result
         });
     });
-});
+}); */
 
-app.get('/insert', (req, res) => {
+/* app.get('/insert', (req, res) => {
     connection.query("INSERT people(name, surname) VALUES ('Sample', 'Person')", (err, result, fields) => {
         if(err) throw err;
         res.json({
@@ -42,7 +43,7 @@ app.get('/insert', (req, res) => {
             result: result
         })
     });
-});
+}); */
 
 app.get('/', (req, res) => {
     res.json({
