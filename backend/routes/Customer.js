@@ -9,15 +9,13 @@ const connection = db.connect();
 
 // Add Customer
 router.post("/add", (req, res) => {
-    connection.query(`INSERT INTO customers 
-    (customer_name, customer_surname, customer_addr, house_no, city, country, postcode, tel_number, email, note) 
-    VALUES ${req.query.name}, ${req.query.surname}, ${req.query.addr}, ${req.query.houseNo}, ${req.query.city}, ${req.query.country}, ${req.query.postcode}, ${req.query.telNum}, ${req.query.email}, ${req.query.note};`, (err, result) => {
+    connection.query(`INSERT INTO customers (customer_name, customer_surname, customer_addr, house_no, city, country, postcode, tel_number, email, note) VALUES ("${req.query.name}", "${req.query.surname}", "${req.query.addr}", ${req.query.houseNo}, "${req.query.city}", "${req.query.country}", "${req.query.postcode}", "${req.query.telNum}", "${req.query.email}", "${req.query.note}");`, (err, result) => {
         if(err) {
             throw err;
             //res.status(400).end();
         } else {
             console.log("Customer added")
-            res.json({result});
+            res.json(result);//
             res.status(200).end();
         }
     });
@@ -42,19 +40,6 @@ router.delete("/delete/:customerid", (req, res) => {
     });
 });
 
-// GET SPECIFIC
-router.get("/get/:customerid", (req, res) => {
-    connection.query(`SELECT * FROM customers WHERE customer_id = ${req.params.customerid}`, (err, result) => {
-        if(err) {
-            throw err;
-        } else {
-            console.log(`Requested data about customer ${req.params.customerid}`);
-            res.json({result});
-            res.status(200).end();
-        }
-    })
-})
-
 // GET ALL
 router.get("/get/all", (req, res) => {
     connection.query(`SELECT * FROM customers`, (err, result) => {
@@ -62,11 +47,11 @@ router.get("/get/all", (req, res) => {
             throw err;
         } else {
             console.log(`Request data about all customers`);
-            res.json({result});
+            res.json(result);
             res.status(200).end();
         }
     });
-}) 
+})
 
 // GET TOP
 router.get("/get/top", (req, res) => {
@@ -74,37 +59,35 @@ router.get("/get/top", (req, res) => {
         if(err) {
             throw err;
         } else {
-            let data = Array();
-            for (const key in customers) {
-                if (customers.hasOwnProperty(key)) {
-                    const element = customers[key];
-                    connection.query(`SELECT * FROM customers WHERE customer_id = ${element};`, (err, result) => {
-                        if(err) {
-                            throw err;
-                        } else {
-                            let customer = {
-                                "customer_id" : result.customer_id,
-                                "customer_name" : result.customer_name,
-                                "customer_surname" : result.customer_surname,
-                                "customer_addr" : result.customer_addr,
-                                "house_no" : result.house_no,
-                                "city" : result.house,
-                                "country" : result.country,
-                                "postcode" : result.postcode,
-                                "tel_number" : result.tel_number,
-                                "email" : result.email,
-                                "note" : result.note
-                            }
-                            data.push(customer);
-                        }
-                    });
-                }
-            }
+            var data = new Array();
+            customers.forEach(element => {
+                console.log(element.customer_id);
+                connection.query(`SELECT * FROM customers WHERE customer_id = ${parseInt(element.customer_id)};`, (err, result) => {
+                    if(err) {
+                        throw err;
+                    } else {
+                        data.push(...result);
+                    }
+                });
+            });
             console.log("Requested data about top customers");
             res.json({data}).status(200).end();
         }
     });
 });
+
+// GET SPECIFIC
+router.get("/get/:customerid", (req, res) => {
+    connection.query(`SELECT * FROM customers WHERE customer_id = ${parseInt(req.params.customerid)};`, (err, result) => {
+        if(err) {
+            throw err;
+        } else {
+            console.log(`Requested data about customer ${req.params.customerid}`);
+            res.json(result);
+            res.status(200).end();
+        }
+    })
+})
 
 // Edit Customer
 router.put("/edit/:customerid", (req, res) => {

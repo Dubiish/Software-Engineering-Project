@@ -45,23 +45,23 @@ router.delete("/delete/:orderId", (req, res) => {
 });
 
 // EDIT ORDER
-router.put("/update/order/:orderid", (req, res) => {
+router.post("/update/order/:orderid", (req, res) => {
     connection.query(`SELECT * FROM orders WHERE order_id = ${req.params.orderid};`, (err, result) => {
         if(err) {
             throw err;
         } else {
             connection.query(`UPDATE orders WHERE order_id = ${req.params.orderid}
             SET customer_id = ${req.query.customer_id},
-            order_date = ${req.query.order_date},
+            order_date = "${req.query.order_date}",
             paid_upfront = ${req.query.paid_upfront},
             total_price = ${req.query.total_price},
-            note = ${req.query.note},
+            note = "${req.query.note}",
             book_num = ${req.query.book_num},
             status = ${req.query.status};`, (err, result) => {
                 if(err) {
                     throw err;
                 } else {
-                    res.json({result}).status(200).end();
+                    res.json(result).status(200).end();
                     console.log(`Updated order ${req.params.orderid}`);
                 }
             });
@@ -70,18 +70,18 @@ router.put("/update/order/:orderid", (req, res) => {
 });
 
 // CHANGE STATUS
-router.put("/update/status/:orderid", (req, res) => {
-    connection.query(`SELECT * FROM orders WHERE order_id = ${req.params.orderid};`, (err, result) => {
+router.post("/update/status/:orderid", (req, res) => {
+    connection.query(`SELECT * FROM orders WHERE order_id = ${parseInt(req.params.orderid)};`, (err, result) => {
         if(err) {
             throw err;
         } else {
             let status = result.status;
             if(status == 0) {
-                status = 1 
+                status = 1;
             } else {
                 status = 0;
             }
-            connection.query(`UPDATE orders SET status = ${status} WHERE order_id = ${req.params.orderid};`, (err, result) => {
+            connection.query(`UPDATE orders SET status = ${status} WHERE order_id = ${req.params.orderid};`, (err, result) => {
                 if(err) {
                     throw err;
                 } else {
@@ -92,29 +92,31 @@ router.put("/update/status/:orderid", (req, res) => {
         }
     });
 });
-// GET SPECIFIC
-router.get("/get/:orderid", (req, res) => {
-    connection.query(`SELECT * FROM orders WHERE order_id = ${req.params.orderid};`, (err, result) => {
+
+// GET ALL
+router.get("/get/all", (req, res) => {
+    connection.query(`SELECT * FROM orders;`, (err, result) => {
         if(err) {
             throw err;
         } else {
-            res.json({result}).status(200).end();
+            res.json(result).status(200).end();
+            console.log(`Requested data of all orders`);
+        }
+    });
+});
+
+// GET SPECIFIC
+router.get("/get/:orderid", (req, res) => {
+    connection.query(`SELECT * FROM orders WHERE order_id = ${req.params.orderid};`, (err, result) => {
+        if(err) {
+            throw err;
+        } else {
+            res.json(result).status(200).end();
             console.log(`Requested data of order ${req.params.orderid}`);
         }
     });
 });
 
-// GET ALL
-router.get("/get/all", (req, res) => {
-    connection.query(`SELECT * FROM orders;`, (err, result) => {
-        if(err) {
-            throw err;
-        } else {
-            res.json({result}).status(200).end();
-            console.log(`Requested data of all orders`);
-        }
-    });
-});
 
 // GET STATUS SUM
 router.get("/get/status/sum", (req, res) => {
@@ -122,7 +124,7 @@ router.get("/get/status/sum", (req, res) => {
         if(err) {
             throw err;
         } else {
-            res.json({result}).status(200).end();
+            res.json(result).status(200).end();
             console.log(`Requested status sum`);
         }
     });
