@@ -1,6 +1,8 @@
-import React from 'react';
-import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
-import Home from './Home.js';
+import React from 'react'
+import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom'
+import Customer from "./components/Customer.js"
+import Order from "./components/Order.js"
+import Default from "./components/Default"
 
 class App extends React.Component {
 
@@ -8,27 +10,15 @@ class App extends React.Component {
     return(
       <Router>
         <Switch>
-          <Route path='/home'>
-            <Home />
-          </Route>
-          <Route path='/'>
-            <Default />
-          </Route>
+          <Route path="/customer"><Customer /></Route>
+          <Route path="/order"><Order /></Route>
+          <Route path="/"><Default /></Route>
         </Switch>
       </Router>      
     )
   }
 }
 
-function Default() {
-  return(
-    <div>
-      <h1> Welcome! </h1>
-      <Link to="/Home">
-        Home
-      </Link>
-    </div>
-  );
-}
+
 
 export default App;
