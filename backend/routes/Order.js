@@ -105,17 +105,6 @@ router.get("/get/all", (req, res) => {
     });
 });
 
-// GET SPECIFIC
-router.get("/get/:orderid", (req, res) => {
-    connection.query(`SELECT * FROM orders WHERE order_id = ${req.params.orderid};`, (err, result) => {
-        if(err) {
-            throw err;
-        } else {
-            res.json(result).status(200).end();
-            console.log(`Requested data of order ${req.params.orderid}`);
-        }
-    });
-});
 
 
 // GET STATUS SUM
@@ -126,6 +115,42 @@ router.get("/get/status/sum", (req, res) => {
         } else {
             res.json(result).status(200).end();
             console.log(`Requested status sum`);
+        }
+    });
+});
+
+// Get count of orders
+router.get("/get/count", (req, res) => {
+    connection.query(`SELECT Count(order_id) AS count FROM orders;`, (err, result) => {
+        if(err) {
+            throw err;
+        } else {
+            res.json(result).status(200).end();
+            console.log("Requested count of orders");
+        }
+    })
+});
+
+// Get profit sum for last 30 days
+router.get("/get/profit/sum", (req, res) => {
+    connection.query("SELECT Sum(total_price) AS profit FROM orders WHERE DATEDIFF(order_date, CURDATE()) between 0 and 30;", (err, result) => {
+        if(err) {
+            throw err;
+        } else {
+            res.json(result).status(200).end();
+            console.log("Requested sum of profit");
+        }
+    })
+});
+
+// GET SPECIFIC
+router.get("/get/:orderid", (req, res) => {
+    connection.query(`SELECT * FROM orders WHERE order_id = ${req.params.orderid};`, (err, result) => {
+        if(err) {
+            throw err;
+        } else {
+            res.json(result).status(200).end();
+            console.log(`Requested data of order ${req.params.orderid}`);
         }
     });
 });
