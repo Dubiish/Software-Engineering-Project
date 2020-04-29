@@ -105,7 +105,7 @@ router.get("/get/count", (req, res) => {
             throw err;
         } else {
             res.json(result).status(200).end();
-            console.log("Requested count of customers")
+            //console.log("Requested count of customers")
         }
     });
 });

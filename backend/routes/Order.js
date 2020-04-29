@@ -133,10 +133,11 @@ router.get("/get/count", (req, res) => {
 
 // Get profit sum for last 30 days
 router.get("/get/profit/sum", (req, res) => {
-    connection.query("SELECT Sum(total_price) AS profit FROM orders WHERE DATEDIFF(order_date, CURDATE()) between 0 and 30;", (err, result) => {
+    connection.query("SELECT SUM(total_price) AS profit FROM orders WHERE DATEDIFF(order_date, CURDATE()) <= 30;", (err, result) => {
         if(err) {
             throw err;
         } else {
+            console.log(result);
             res.json(result).status(200).end();
             console.log("Requested sum of profit");
         }

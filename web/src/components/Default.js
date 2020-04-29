@@ -25,7 +25,7 @@ class Default extends React.Component {
 
   componentDidMount() {
     this.fetchData();
-    this.timer = setInterval(() => this.fetchData(), 10000);
+    this.timer = setInterval(() => this.fetchData(), 20000);
   }
 
   componentWillUnmount() {
@@ -53,36 +53,33 @@ class Default extends React.Component {
     fetch("http://localhost:4000/order/get/count", details).then((ordersResponse) => {
       return ordersResponse.json();
     }).then((data) => {
-      result["ordersCount"] = data.count;
+      result["ordersCount"] = data[0].count;
       fetch("http://localhost:4000/customer/get/count", details).then((customersResponse) => {
         return customersResponse.json();
       }).then((customersData) => {
-        result["customersCount"] = customersData.count;
+        result["customersCount"] = customersData[0].Count;
         fetch("http://localhost:4000/order/get/profit/sum", details).then((profitResponse) => {
           return profitResponse.json();
         }).then((profitData) => {
-          result["profit"] = profitData;
+          result["profit"] = profitData[0].profit;
           fetch("http://localhost:4000/order/get/status/sum", details).then((statusResponse) => {
             return statusResponse.json();
           }).then((statusData) => {
             result["openOrders"] = statusData[0].count;
             result["closedOrders"] = statusData[1].count;
-            console.log(result);
+            this.setState({
+              ...this.state,
+              totalOrders : result.ordersCount,
+              totalCustomers : result.customersCount,
+              profit : result.profit,
+              openOrders : result.openOrders,
+              closedOrders : result.closedOrders,
+            }); 
           });
         });
       });
     });
 
-    this.setState({
-      ...this.state,
-      totalOrders : result.ordersCount,
-      totalCustomers : result.customersCount,
-      profit : result.profit,
-      openOrders : result.openOrders,
-      closedOrders : result.closedOrders,
-    }, () => {
-      console.log(this.state);
-    })
   }
 
   render() {
