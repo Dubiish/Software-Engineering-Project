@@ -42,13 +42,12 @@ router.delete("/delete/:customerid", (req, res) => {
 
 // GET ALL
 router.get("/get/all", (req, res) => {
-    connection.query(`SELECT * FROM customers`, (err, result) => {
+    connection.query("SELECT * FROM customers", (err, result) => {
         if(err) {
             throw err;
         } else {
             console.log(`Request data about all customers`);
-            res.json(result);
-            res.status(200).end();
+            res.json(result).status(200).end();
         }
     });
 })
