@@ -5,18 +5,23 @@ import Order from "./components/Order.js";
 import Default from "./components/Default";
 
 class App extends React.Component {
+
+  state = {
+    api: "http://localhost:4000/"
+  };
+
   render() {
     return (
       <Router>
         <Switch>
           <Route path="/customer">
-            <Customer />
+            <Customer api={this.state.api} />
           </Route>
           <Route path="/order">
-            <Order />
+            <Order api={this.state.api} />
           </Route>
           <Route path="/">
-            <Default />
+            <Default api={this.state.api} />
           </Route>
         </Switch>
       </Router>

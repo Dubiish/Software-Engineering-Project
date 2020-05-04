@@ -50,19 +50,19 @@ class Default extends React.Component {
       },
     }
 
-    fetch("http://localhost:4000/order/get/count", details).then((ordersResponse) => {
+    fetch(this.props.api + "order/get/count", details).then((ordersResponse) => {
       return ordersResponse.json();
     }).then((data) => {
       result["ordersCount"] = data[0].count;
-      fetch("http://localhost:4000/customer/get/count", details).then((customersResponse) => {
+      fetch(this.props.api + "customer/get/count", details).then((customersResponse) => {
         return customersResponse.json();
       }).then((customersData) => {
         result["customersCount"] = customersData[0].Count;
-        fetch("http://localhost:4000/order/get/profit/sum", details).then((profitResponse) => {
+        fetch(this.props.api + "order/get/profit/sum", details).then((profitResponse) => {
           return profitResponse.json();
         }).then((profitData) => {
           result["profit"] = profitData[0].profit;
-          fetch("http://localhost:4000/order/get/status/sum", details).then((statusResponse) => {
+          fetch(this.props.api + "order/get/status/sum", details).then((statusResponse) => {
             return statusResponse.json();
           }).then((statusData) => {
             result["openOrders"] = statusData[0].count;
@@ -90,7 +90,7 @@ class Default extends React.Component {
           <Row>
             <Col>
               <Breadcrumb className="mt-3">
-                <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+                <Breadcrumb.Item href="/">Oakify</Breadcrumb.Item>
                 <Breadcrumb.Item active>Dashboard</Breadcrumb.Item>
               </Breadcrumb>
             </Col>

@@ -45,3 +45,5 @@ create table orders (order_id int primary key auto_increment, customer_id int no
 default 0, note text default null, book_num int default null, status int default
  0, foreign key (customer_id) references customers(customer_id));
 
+Whats not working:
+Table orders needs manual refresh
