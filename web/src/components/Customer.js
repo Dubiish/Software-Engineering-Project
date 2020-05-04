@@ -13,7 +13,6 @@ class Customer extends React.Component {
       modalCustomer: null
     }
 
-
     this.onRowClick = this.onRowClick.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
   }
@@ -34,6 +33,9 @@ class Customer extends React.Component {
     await fetch(`${this.props.api}customer/get/${chosenCustomerId}`, flags).then((response) => {
       return response.json();
     }).then((extractedData) => {
+      if(extractedData[0].note == null) {
+        extractedData[0].note = "Empty"
+      }
       this.setState({
         ...this.state,
         modalCustomer: extractedData[0]
@@ -91,7 +93,7 @@ class Customer extends React.Component {
       {title: "E-mail", prop: "email", filterable: true},
     ];
 
-    var concreteCustomer = null;
+    var concreteCustomer;
     if(this.state.modalCustomer != null) {
       concreteCustomer = this.state.modalCustomer;
     }
@@ -107,67 +109,67 @@ class Customer extends React.Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formCustomerId">
                   <Form.Label>Customer ID</Form.Label>
-                  <Form.Control name="customer_id" type="text" placeholder="ID" readOnly value={concreteCustomer ? concreteCustomer.customer_id : null} />
+                  <Form.Control name="customer_id" type="text" placeholder="ID" readOnly defaultValue={concreteCustomer ? concreteCustomer.customer_id : null} />
                 </Form.Group>
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formCustomerName">
                   <Form.Label>Name</Form.Label>
-                  <Form.Control type="text" name="customer_name" placeholder="Customer's name" value={concreteCustomer ? concreteCustomer.customer_name : null} />
+                  <Form.Control type="text" name="customer_name" placeholder="Customer's name" defaultValue={concreteCustomer ? concreteCustomer.customer_surname : null} />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formCustomerSurname">
                   <Form.Label>Surname</Form.Label>
-                  <Form.Control type="text" name="customer_surname" placeholder="Customer's surname" value={concreteCustomer ? concreteCustomer.customer_surname : null} />
+                  <Form.Control type="text" name="customer_surname" placeholder="Customer's surname" defaultValue={concreteCustomer ? concreteCustomer.customer_surname : null} />
                 </Form.Group>
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formStreetName">
                   <Form.Label>Street</Form.Label>
-                  <Form.Control type="text" name="street_name" placeholder="Street name" value={concreteCustomer ? concreteCustomer.street_name : null} />
+                  <Form.Control type="text" name="street_name" placeholder="Street name" defaultValue={concreteCustomer ? concreteCustomer.street_name : null} />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formHouseNumber">
                   <Form.Label>House No.</Form.Label>
-                  <Form.Control type="text" name="house_number" placeholder="House number" value={concreteCustomer ? concreteCustomer.house_number : null} />
+                  <Form.Control type="text" name="house_number" placeholder="House number" defaultValue={concreteCustomer ? concreteCustomer.house_number : null} />
                 </Form.Group>
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formCity">
                   <Form.Label>City</Form.Label>
-                  <Form.Control type="text" name="city" placeholder="City" value={concreteCustomer ? concreteCustomer.city : null} />
+                  <Form.Control type="text" name="city" placeholder="City" defaultValue={concreteCustomer ? concreteCustomer.city : null} />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formCountry">
                   <Form.Label>Country/State</Form.Label>
-                  <Form.Control type="text" name="country" placeholder="Country/State" value={concreteCustomer ? concreteCustomer.country : null} />
+                  <Form.Control type="text" name="country" placeholder="Country/State" defaultValue={concreteCustomer ? concreteCustomer.country : null} />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formPostCode">
                   <Form.Label>Post code</Form.Label>
-                  <Form.Control type="text" name="post_code" placeholder="Post code" value={concreteCustomer ? concreteCustomer.post_code : null} />
+                  <Form.Control type="text" name="post_code" placeholder="Post code" defaultValue={concreteCustomer ? concreteCustomer.post_code : null} />
                 </Form.Group>
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formPhoneNumber">
                   <Form.Label>Phone number</Form.Label>
-                  <Form.Control type="text" name="phone_number" placeholder="Phone number" value={concreteCustomer ? concreteCustomer.phone_number : null} />
+                  <Form.Control type="text" name="phone_number" placeholder="Phone number" defaultValue={concreteCustomer ? concreteCustomer.phone_number : null} />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formEmail">
                   <Form.Label>E-mail</Form.Label>
-                  <Form.Control type="text" name="email" placeholder="E-mail" value={concreteCustomer ? concreteCustomer.email : null} />
+                  <Form.Control type="text" name="email" placeholder="E-mail" defaultValue={concreteCustomer ? concreteCustomer.email : null} />
                 </Form.Group>
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formNote">
                   <Form.Label>Note</Form.Label>
-                  <Form.Control name="note" as="textarea" rows="5" value={concreteCustomer ? concreteCustomer.note : null} />
+                  <Form.Control name="note" as="textarea" rows="5" defaultValue={concreteCustomer ? concreteCustomer.note : "Empty"} />
                 </Form.Group>
               </Form.Row>
             </Form>
