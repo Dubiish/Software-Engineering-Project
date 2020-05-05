@@ -1,7 +1,7 @@
 import React from "react";
-import { Container, Row, Col, Button, Navbar, Nav, Breadcrumb, Form, Modal} from "react-bootstrap";
+import { Container, Row, Col, Button, Navbar, Nav, Breadcrumb, Form, Modal, Toast, Spinner} from "react-bootstrap";
 import Datatable from "react-bs-datatable";
-import Navigation from "./Navigation";
+import Navigation from "../Navigation";
 
 class Customer extends React.Component {
 
@@ -10,11 +10,15 @@ class Customer extends React.Component {
     this.state = {
       customers: [],
       showModal: false,
-      modalCustomer: null
+      modalCustomer: null,
+      editToast: false,
+      deleteToast: false
     }
 
     this.onRowClick = this.onRowClick.bind(this);
     this.toggleModal = this.toggleModal.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
@@ -52,6 +56,20 @@ class Customer extends React.Component {
     })
   }
 
+  toggleEditToast() {
+    this.setState({
+      ...this.state,
+      editToast: !this.state.editToast
+    })
+  }
+
+  toggleDeleteToast() {
+    this.setState({
+      ...this.state,
+      deleteToast: !this.state.deleteToast
+    })
+  }
+
   async fetchTableData() {
     let flags = {
       method: "GET",
@@ -69,7 +87,7 @@ class Customer extends React.Component {
           customer_id : element.customer_id,
           customer_name: element.customer_name,
           customer_surname: element.customer_surname,
-          customer_address: element.street_name + " " + element.house_number + " " + element.city + " " + element.post_code + " " + element.country,
+          customer_address: element.street_name + " " + element.house_number + ", " + element.city + " " + element.post_code + ", " + element.country,
           phone_number: element.phone_number,
           email: element.email,
           note: element.note,
@@ -80,6 +98,54 @@ class Customer extends React.Component {
         customers: parsedData
       });
     });
+  }
+
+  handleSubmit(e) {
+    e.preventDefault();
+    const data = new FormData(e.target);
+    let customerId = data.get("customer_id");
+    let formatedData = {
+      customer_name: data.get("name"),
+      customer_surname: data.get("surname"),
+      customer_addr: data.get("street"),
+      house_no: data.get("houseNumber"),
+      city: data.get("city"),
+      country: data.get("country"),
+      postcode: data.get("postCode"),
+      tel_number: data.get("phoneNumber"),
+      email: data.get("email"),
+      note: data.get("note")
+    };
+    fetch(`${this.props.api}customer/edit/${customerId}`, {
+      method: "POST",
+      mode: "cors",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(formatedData)
+    }).then((result) => {
+      this.toggleEditToast();
+      this.fetchTableData();
+      this.toggleModal();
+    })
+  }
+
+  handleDelete(id) {
+    if(id == null) {
+      return;
+    } else {
+      fetch(`${this.props.api}customer/delete/${id}`, {
+        method: "DELETE"
+      }).then((response) => {
+        this.toggleDeleteToast();
+        this.fetchTableData();
+        this.toggleModal();
+      })
+    }
   }
 
   render() {
@@ -93,9 +159,11 @@ class Customer extends React.Component {
       {title: "E-mail", prop: "email", filterable: true},
     ];
 
-    var concreteCustomer;
+    var concreteCustomer = null;
+    var id = null;
     if(this.state.modalCustomer != null) {
       concreteCustomer = this.state.modalCustomer;
+      id = concreteCustomer.customer_id;
     }
 
     return (
@@ -105,7 +173,7 @@ class Customer extends React.Component {
             <Modal.Title>Edit Customer</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <Form>
+            <Form onSubmit={this.handleSubmit}>
               <Form.Row>
                 <Form.Group as={Col} controlId="formCustomerId">
                   <Form.Label>Customer ID</Form.Label>
@@ -116,24 +184,24 @@ class Customer extends React.Component {
               <Form.Row>
                 <Form.Group as={Col} controlId="formCustomerName">
                   <Form.Label>Name</Form.Label>
-                  <Form.Control type="text" name="customer_name" placeholder="Customer's name" defaultValue={concreteCustomer ? concreteCustomer.customer_surname : null} />
+                  <Form.Control type="text" name="name" placeholder="Customer's name" defaultValue={concreteCustomer ? concreteCustomer.customer_name : null} />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formCustomerSurname">
                   <Form.Label>Surname</Form.Label>
-                  <Form.Control type="text" name="customer_surname" placeholder="Customer's surname" defaultValue={concreteCustomer ? concreteCustomer.customer_surname : null} />
+                  <Form.Control type="text" name="surname" placeholder="Customer's surname" defaultValue={concreteCustomer ? concreteCustomer.customer_surname : null} />
                 </Form.Group>
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formStreetName">
                   <Form.Label>Street</Form.Label>
-                  <Form.Control type="text" name="street_name" placeholder="Street name" defaultValue={concreteCustomer ? concreteCustomer.street_name : null} />
+                  <Form.Control type="text" name="street" placeholder="Street name" defaultValue={concreteCustomer ? concreteCustomer.street_name : null} />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formHouseNumber">
                   <Form.Label>House No.</Form.Label>
-                  <Form.Control type="text" name="house_number" placeholder="House number" defaultValue={concreteCustomer ? concreteCustomer.house_number : null} />
+                  <Form.Control type="text" name="houseNumber" placeholder="House number" defaultValue={concreteCustomer ? concreteCustomer.house_number : null} />
                 </Form.Group>
               </Form.Row>
 
@@ -150,14 +218,14 @@ class Customer extends React.Component {
 
                 <Form.Group as={Col} controlId="formPostCode">
                   <Form.Label>Post code</Form.Label>
-                  <Form.Control type="text" name="post_code" placeholder="Post code" defaultValue={concreteCustomer ? concreteCustomer.post_code : null} />
+                  <Form.Control type="text" name="postCode" placeholder="Post code" defaultValue={concreteCustomer ? concreteCustomer.post_code : null} />
                 </Form.Group>
               </Form.Row>
 
               <Form.Row>
                 <Form.Group as={Col} controlId="formPhoneNumber">
                   <Form.Label>Phone number</Form.Label>
-                  <Form.Control type="text" name="phone_number" placeholder="Phone number" defaultValue={concreteCustomer ? concreteCustomer.phone_number : null} />
+                  <Form.Control type="text" name="phoneNumber" placeholder="Phone number" defaultValue={concreteCustomer ? concreteCustomer.phone_number : null} />
                 </Form.Group>
 
                 <Form.Group as={Col} controlId="formEmail">
@@ -172,19 +240,19 @@ class Customer extends React.Component {
                   <Form.Control name="note" as="textarea" rows="5" defaultValue={concreteCustomer ? concreteCustomer.note : "Empty"} />
                 </Form.Group>
               </Form.Row>
+              <Form.Row className="float-right">
+                <Button variant="success" type="submit" name="submit">Save</Button>
+                <Button className="ml-1" variant="danger" onClick={() => this.handleDelete(id)}>Delete</Button>
+                <Button className="ml-1" variant="secondary" onClick={this.toggleModal}>Close</Button>
+              </Form.Row>
             </Form>
           </Modal.Body>
-          <Modal.Footer>
-          <Button variant="success">Save</Button>
-          <Button variant="danger">Delete</Button>
-          <Button variant="secondary" onClick={this.toggleModal}>Close</Button>
-          </Modal.Footer>
         </Modal>
         <Navigation />
         <Navbar bg="secondary" size="small">
           <Navbar.Brand className="text-light">Customers</Navbar.Brand>
           <Nav className="mr-auto">
-            <Button variant="info">New customer</Button>
+            <Button variant="info" href="/customer/new">New customer</Button>
             <Button variant="secondary" className="ml-1">Export</Button>
             <Button variant="secondary" className="ml-1">Import</Button>
           </Nav>
@@ -217,6 +285,34 @@ class Customer extends React.Component {
             </Col>
           </Row>
         </Container>
+        <Toast
+          onClose={() => this.toggleEditToast()}
+          show={this.state.editToast}
+          delay={5000}
+          autohide
+          style={{ position: "absolute", top: 125, right: 60 }}
+        >
+          <Toast.Header>
+              <strong className="mr-auto text-success"> <Spinner animation="grow" variant="success" size="sm" /> Sucess!</strong>
+          </Toast.Header>
+          <Toast.Body>
+              Customer edited successfully!
+          </Toast.Body>
+        </Toast>
+        <Toast
+            onClose={() => this.toggleDeleteToast()}
+            show={this.state.deleteToast}
+            delay={5000}
+            autohide
+            style={{ position: "absolute", top: 125, right: 60 }}
+          >
+            <Toast.Header>
+                <strong className="mr-auto text-warning"> <Spinner animation="grow" variant="warming" size="sm" /> Sucess!</strong>
+            </Toast.Header>
+            <Toast.Body>
+                Customer deleted!
+            </Toast.Body>
+        </Toast>  
       </div>
     );
   }

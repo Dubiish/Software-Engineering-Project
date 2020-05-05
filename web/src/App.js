@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Customer from "./components/Customer.js";
+import Customer from "./components/customer/Customer.js";
 import Order from "./components/Order.js";
 import Default from "./components/Default";
+import NewCustomer from "./components/customer/NewCustomer.js";
 
 class App extends React.Component {
 
@@ -14,6 +15,9 @@ class App extends React.Component {
     return (
       <Router>
         <Switch>
+          <Route path="/customer/new">
+            <NewCustomer api={this.state.api} />
+          </Route>
           <Route path="/customer">
             <Customer api={this.state.api} />
           </Route>

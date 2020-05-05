@@ -210,7 +210,7 @@ class Default extends React.Component {
                           </Button>
                         </li>
                         <li className="mt-2">
-                          <Button variant="outline-dark">
+                          <Button variant="outline-dark" href="/customer/new">
                             <svg
                               className="bi bi-person-plus mr-2"
                               width="1em"
@@ -265,7 +265,7 @@ class Default extends React.Component {
           >
             <Toast.Header>
               <strong className="mr-auto">Welcome!</strong>
-              <small>3 minutes ago</small>
+              <small>Right now</small>
             </Toast.Header>
             <Toast.Body>
               Looks like this is your first time. Show me some <u>tips!</u>

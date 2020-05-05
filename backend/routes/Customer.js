@@ -9,10 +9,10 @@ const connection = db.connect();
 
 // Add Customer
 router.post("/add", (req, res) => {
-    connection.query(`INSERT INTO customers (customer_name, customer_surname, customer_addr, house_no, city, country, postcode, tel_number, email, note) VALUES ("${req.query.name}", "${req.query.surname}", "${req.query.addr}", ${req.query.houseNo}, "${req.query.city}", "${req.query.country}", "${req.query.postcode}", "${req.query.telNum}", "${req.query.email}", "${req.query.note}");`, (err, result) => {
+    console.log(req.body);
+    connection.query(`INSERT INTO customers (customer_name, customer_surname, street_name, house_number, city, country, post_code, phone_number, email, note) VALUES ("${req.body.name}", "${req.body.surname}", "${req.body.street}", "${req.body.houseNumber}", "${req.body.city}", "${req.body.country}", "${req.body.postCode}", "${req.body.phoneNumber}", "${req.body.email}", "${req.body.note}");`, (err, result) => {
         if(err) {
             throw err;
-            //res.status(400).end();
         } else {
             console.log("Customer added")
             res.json(result);//
@@ -76,18 +76,8 @@ router.get("/get/top", (req, res) => {
 });
 
 // Edit Customer
-router.put("/edit/:customerid", (req, res) => {
-    connection.query(`UPDATE customers WHERE customer_id = ${req.params.customerid}
-    SET customer_name = ${req.query.customer_name},
-    customer_surname = ${req.query.customer_surname},
-    customer_addr = ${req.query.customer_addr},
-    house_no = ${req.query.house_no},
-    city = ${req.query.city},
-    country = ${req.query.country},
-    postcode = ${req.query.postcode},
-    tel_number = ${req.query.tel_number},
-    email = ${req.query.email},
-    note = ${req.query.note};`, (err, result) => {
+router.post("/edit/:customerid", (req, res) => {
+    connection.query(`UPDATE customers SET customer_name = "${req.body.customer_name}", customer_surname = "${req.body.customer_surname}", street_name = "${req.body.customer_addr}", house_number = "${req.body.house_no}", city = "${req.body.city}", country = "${req.body.country}", post_code = "${req.body.postcode}", phone_number = "${req.body.tel_number}", email = "${req.body.email}", note = "${req.body.note}" WHERE customer_id = ${req.params.customerid} ;`, (err, result) => {
         if(err) {
             throw err;
         } else {
