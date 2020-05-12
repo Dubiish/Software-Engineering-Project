@@ -77,7 +77,7 @@ class NewCustomer extends React.Component {
                 <Navbar bg="secondary" size="small">
                     <Navbar.Brand className="text-light">New Customer</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <Button variant="info" className="ml-1">Import from file</Button>
+                        <Button variant="info" className="ml-1" disabled>Import from file</Button>
                     </Nav>
                 </Navbar>
                 <Container fluid>

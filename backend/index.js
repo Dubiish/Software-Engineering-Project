@@ -15,21 +15,23 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
+// MIDDLEWARE
 app.use(cors());
 app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
 
-
+// ROUTES
 app.use('/customer', require('./routes/Customer'));
 app.use('/order', require('./routes/Order'));
+app.use('/utils', require("./routes/Utils"));
 app.use('/user', require('./routes/User'));
 app.use('/log', require('./routes/Log'));
 
 app.get('/', (req, res) => {
     res.json({
-        message: 'Welcome to sample_shop API!',
+        message: 'Welcome to OAKIFY API!',
         database_state: connection.state
     });
 });

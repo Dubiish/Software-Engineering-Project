@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var mysqldump = require("mysqldump");
-var fs = require("fs")
 
 var Database = require("../settings");
 
@@ -88,27 +87,6 @@ router.post("/edit/:customerid", (req, res) => {
         }
     });
 });
-
-router.get("/get/export", (req, res) => {
-    let file = `${Date.now()}_export.sql`
-    const db = (new Database()).getDatabase();
-    mysqldump({
-        connection: db,
-        dumpToFile: `./exports/${file}`
-    })
-    res.download(`./exports/${file}`, "export.sql", (err) => {
-        if(err) {
-            throw err;
-        } else {
-            // WIP!!! THIS DOES NOT WORK
-            fs.unlinkSync(`./exports/${file}`, (err) => {
-                if(err) {
-                    throw err;
-                }
-            });
-        }
-    })
-})
 
 // Get count of customers
 router.get("/get/count", (req, res) => {

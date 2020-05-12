@@ -14,10 +14,10 @@ function Navigation() {
                     <Nav.Link href="/">Dashboard</Nav.Link>
                     <Nav.Link href="/customer">Customers</Nav.Link>
                     <Nav.Link href="/order">Orders</Nav.Link>
-                    <Nav.Link href="/users">Users</Nav.Link>
+                    <Nav.Link href="/users" disabled>Users</Nav.Link>
                     <NavDropdown title="Settings" id="dropdown-settings">
-                        <NavDropdown.Item href="/backup">Backup</NavDropdown.Item>
-                        <NavDropdown.Item href="/logs">Logs</NavDropdown.Item>
+                        <NavDropdown.Item href="/backup" disabled>Backup</NavDropdown.Item>
+                        <NavDropdown.Item href="/logs" disabled>Logs</NavDropdown.Item>
                     </NavDropdown>
                 </Nav>
                 {/* <Form inline>
@@ -39,13 +39,13 @@ function Navigation() {
                             clipRule="evenodd"
                         />
                     </svg>
-          Signed in as:{" "}
+                        Signed in as:{" "}
                     <a href="/" className="ml-1">
                         Lukáš Solvar
-          </a>
-                    <Button variant="info" size="sm" className="ml-3">
+                    </a>
+                    <Button variant="info" size="sm" className="ml-3" disabled>
                         Log out
-          </Button>
+                    </Button>
                 </Navbar.Text>
             </Navbar.Collapse>
         </Navbar>

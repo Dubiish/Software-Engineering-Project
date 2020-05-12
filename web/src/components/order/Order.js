@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Row, Col, Button, Navbar, Nav, Breadcrumb, Modal, Form } from "react-bootstrap";
+import { Container, Row, Col, Button, Navbar, Nav, Breadcrumb, Modal, Form, Toast, Spinner } from "react-bootstrap";
 import Datatable from "react-bs-datatable";
 import Navigation from "../Navigation";
 import * as moment from "moment"
@@ -11,7 +11,8 @@ class Order extends React.Component {
 		this.state = {
 			orders: [],
 			concreteOrder: {},
-			showOrderModal: false
+            showOrderModal: false,
+            exportToast: false
 		}
 
 		this.toggleModal = this.toggleModal.bind(this);
@@ -19,6 +20,7 @@ class Order extends React.Component {
 		this.handleSubmit = this.handleSubmit.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.fetchData = this.fetchData.bind(this);
+        this.handleExport = this.handleExport.bind(this);
     }
     
     componentDidMount() {
@@ -69,7 +71,18 @@ class Order extends React.Component {
 				this.toggleModal();
 			})
 		}
-	}
+    }
+
+    toggleExportToast() {
+        this.setState({
+            ...this.state,
+            exportToast: !this.state.exportToast
+        })
+    }
+    
+    handleExport() {
+        this.toggleExportToast();
+    }
 
 	async onRowClick(data) {
 		let orderId = data.order_id;
@@ -243,8 +256,8 @@ class Order extends React.Component {
 					<Navbar.Brand className="text-light">Orders</Navbar.Brand>
 					<Nav className="mr-auto">
 						<Button variant="info" href="/order/new">New order</Button>
-						<Button variant="secondary" className="ml-1">Export</Button>
-						<Button variant="secondary" className="ml-1">Import</Button>
+						<Button variant="secondary" className="ml-1" href={`${this.props.api}utils/get/export/all`} onClick={this.handleExport}>Export</Button>
+						<Button variant="secondary" className="ml-1" disabled>Import</Button>
 					</Nav>
 				</Navbar>
 				<Container fluid>
@@ -277,6 +290,20 @@ class Order extends React.Component {
 						</Col>
 					</Row>
 				</Container>
+                <Toast
+                    onClose={() => this.toggleExportToast()}
+                    show={this.state.exportToast}
+                    delay={5000}
+                    autohide
+                    style={{ position: "absolute", top: 125, right: 60 }}
+                >
+                    <Toast.Header>
+                        <strong className="mr-auto text-success"> <Spinner animation="grow" variant="success" size="sm" /> Sucess!</strong>
+                    </Toast.Header>
+                    <Toast.Body>
+                        Export successful!
+			        </Toast.Body>
+                </Toast>
 			</div>
 		);
 	}

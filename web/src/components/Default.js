@@ -100,7 +100,7 @@ class Default extends React.Component {
                             <ButtonGroup aria-label="navigation group">
                                 <Button variant="text-dark" href="/customer">Customers</Button>
                                 <Button variant="text-dark" className="ml-1" href="/order">Orders</Button>
-                                <Button variant="text-dark" className="ml-1" href="/user">Users</Button>
+                                <Button variant="text-dark" className="ml-1" href="/user" disabled>Users</Button>
                             </ButtonGroup>
                         </Col>
                     </Row>
