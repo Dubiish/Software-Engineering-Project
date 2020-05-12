@@ -14,8 +14,8 @@ router.post("/add", (req, res) => {
     let hash = crypto.createHash("sha256");
     hash = hash.update(req.query.password);
     hash = hash.digest("hex");
-    connection.query(`INSERT INTO users (user_name, user_password, status) VALUES ("${req.query.name}", "${hash}", "${req.query.status}")`, (err) => {
-        if(err) {
+    connection.query(`INSERT INTO users (user_name, user_password, status) VALUES ("${req.query.name}", "${hash}", "${req.query.status}")`, (err) => {
+        if (err) {
             res.status(404).end();
         } else {
             res.status(200).end();
@@ -27,7 +27,7 @@ router.post("/add", (req, res) => {
 router.get("/get/all", (req, res) => {
     console.log("Getting all user data");
     connection.query(`SELECT user_id, user_name, status FROM users;`, (err, result) => {
-        if(err) {
+        if (err) {
             console.log(err);
             res.status(404).end();
         } else {
@@ -42,7 +42,7 @@ router.get("/get/all", (req, res) => {
 router.get("/get/:userid", (req, res) => {
     console.log(`Getting user data of user: ${req.params.userid}`);
     connection.query(`SELECT user_id, user_name, status FROM users WHERE user_id = ${parseInt(req.params.userid)};`, (err, result) => {
-        if(err) {
+        if (err) {
             console.log(err);
             res.status(404).end();
         } else {
@@ -57,12 +57,12 @@ router.get("/get/:userid", (req, res) => {
 router.put("/edit/:userid", (req, res) => {
     console.log(`Editing data of user: ${req.params.userid}`);
     connection.query(`SELECT user_id FROM users WHERE user_id = ${parseInt(req.params.userid)};`, (err, resut) => {
-        if(err) {
+        if (err) {
             console.log(`User with ID: ${req.params.userid} does not exist!`);
             res.status(404).end();
         } else {
             connection.query(`UPDATE users SET user_name = "${req.query.username}", status = ${req.query.status} WHERE user_id = ${parseInt(req.params.userid)} ;`, (err) => {
-                if(err) {
+                if (err) {
                     console.log(err);
                     res.status(404).end();
                 } else {
@@ -77,7 +77,7 @@ router.put("/edit/:userid", (req, res) => {
 router.delete("/delete/:userid", (req, res) => {
     console.log(`Deleting user: ${req.params.userid}`);
     connection.query(`SELECT user_id FROM users WHERE user_id = ${parseInt(req.params.userid)};`, (err, result) => {
-        if(err) {
+        if (err) {
             console.log(`User with id ${req.params.userid} does not exist!`);
             res.status(404).end();
         } else {
@@ -93,7 +93,7 @@ router.delete("/delete/:userid", (req, res) => {
 
 
 // DEFAULT
-router.all("/", (req, res) => {
+router.all("/", (req, res) => {
     res.send("Incorrect request!");
 });
 

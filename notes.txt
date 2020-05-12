@@ -47,3 +47,4 @@ default 0, note text default null, book_num int default null, status int default
 
 Whats not working:
 Table orders needs manual refresh
+Exports have to be deleted manually

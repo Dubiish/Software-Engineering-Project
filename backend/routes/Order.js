@@ -9,34 +9,27 @@ const connection = db.connect();
 
 // ADD ORDER
 router.post("/create/new", (req, res) => {
-    connection.query(`INSERT INTO orders (customer_id, order_date, paid_upfront, total_price, note, book_num, status) 
-    VALUES (${req.query.customer_id},
-        ${req.query.order_date},
-        ${req.query.paid_upfront},
-        ${req.query.total_price},
-        ${req.query.note},
-        ${req.query.book_num},
-        ${req.query.status});`, (err, result) => {
-            if(err) {
-                throw err;
-            } else {
-                res.json({result}).status(200).end();
-                console.log(`New order created`);
-            }
-        });
+    connection.query(`INSERT INTO orders (customer_id, order_date, paid_upfront, total_price, note, book_number, status) VALUES (${req.body.customer_id}, "${req.body.order_date}", ${req.body.paid_upfront}, ${req.body.total_price}, "${req.body.note}", ${req.body.book_number}, ${req.body.status});`, (err, result) => {
+        if (err) {
+            res.status(404).end();
+        } else {
+            res.json({ result }).status(200).end();
+            console.log(`New order created`);
+        }
+    });
 });
 
 // DELETE ORDER
 router.delete("/delete/:orderId", (req, res) => {
     connection.query(`SELECT * FROM orders WHERE order_id = ${req.params.orderId};`, (err, result) => {
-        if(err) {
+        if (err) {
             throw err;
         } else {
             connection.query(`DELETE FROM orders WHERE order_id = ${req.params.orderId};`, (err, result) => {
-                if(err) {
+                if (err) {
                     throw err;
                 } else {
-                    res.json({result}).status(200).end();
+                    res.json({ result }).status(200).end();
                     console.log(`Deleted order with id ${req.params.orderId}`);
                 }
             })
@@ -47,18 +40,11 @@ router.delete("/delete/:orderId", (req, res) => {
 // EDIT ORDER
 router.post("/update/order/:orderid", (req, res) => {
     connection.query(`SELECT * FROM orders WHERE order_id = ${req.params.orderid};`, (err, result) => {
-        if(err) {
+        if (err) {
             throw err;
         } else {
-            connection.query(`UPDATE orders WHERE order_id = ${req.params.orderid}
-            SET customer_id = ${req.query.customer_id},
-            order_date = "${req.query.order_date}",
-            paid_upfront = ${req.query.paid_upfront},
-            total_price = ${req.query.total_price},
-            note = "${req.query.note}",
-            book_num = ${req.query.book_num},
-            status = ${req.query.status};`, (err, result) => {
-                if(err) {
+            connection.query(`UPDATE orders SET customer_id = ${req.body.customer_id}, order_date = "${req.body.order_date}", paid_upfront = ${req.body.advance_payment}, total_price = ${req.body.total_price}, note = "${req.body.note}", book_number = ${req.body.book_number}, status = ${req.body.status} WHERE order_id = ${req.params.orderid};`, (err, result) => {
+                if (err) {
                     throw err;
                 } else {
                     res.json(result).status(200).end();
@@ -71,21 +57,21 @@ router.post("/update/order/:orderid", (req, res) => {
 
 // CHANGE STATUS
 router.post("/update/status/:orderid", (req, res) => {
-    connection.query(`SELECT * FROM orders WHERE order_id = ${parseInt(req.params.orderid)};`, (err, result) => {
-        if(err) {
+    connection.query(`SELECT * FROM orders WHERE order_id = ${parseInt(req.params.orderid)};`, (err, result) => {
+        if (err) {
             throw err;
         } else {
             let status = result.status;
-            if(status == 0) {
+            if (status == 0) {
                 status = 1;
             } else {
                 status = 0;
             }
             connection.query(`UPDATE orders SET status = ${status} WHERE order_id = ${req.params.orderid};`, (err, result) => {
-                if(err) {
+                if (err) {
                     throw err;
                 } else {
-                    res.json({result}).status(200).end();
+                    res.json({ result }).status(200).end();
                     console.log(`Changed order status of order ${req.params.orderid}`);
                 }
             });
@@ -96,7 +82,7 @@ router.post("/update/status/:orderid", (req, res) => {
 // GET ALL
 router.get("/get/all", (req, res) => {
     connection.query(`SELECT * FROM orders;`, (err, result) => {
-        if(err) {
+        if (err) {
             throw err;
         } else {
             res.json(result).status(200).end();
@@ -110,7 +96,7 @@ router.get("/get/all", (req, res) => {
 // GET STATUS SUM
 router.get("/get/status/sum", (req, res) => {
     connection.query(`SELECT status, Count(status) AS count FROM orders GROUP BY status;`, (err, result) => {
-        if(err) {
+        if (err) {
             throw err;
         } else {
             res.json(result).status(200).end();
@@ -122,7 +108,7 @@ router.get("/get/status/sum", (req, res) => {
 // Get count of orders
 router.get("/get/count", (req, res) => {
     connection.query(`SELECT Count(order_id) AS count FROM orders;`, (err, result) => {
-        if(err) {
+        if (err) {
             throw err;
         } else {
             res.json(result).status(200).end();
@@ -134,7 +120,7 @@ router.get("/get/count", (req, res) => {
 // Get profit sum for last 30 days
 router.get("/get/profit/sum", (req, res) => {
     connection.query("SELECT SUM(total_price) AS profit FROM orders WHERE DATEDIFF(order_date, CURDATE()) <= 30;", (err, result) => {
-        if(err) {
+        if (err) {
             throw err;
         } else {
             console.log(result);
@@ -147,7 +133,7 @@ router.get("/get/profit/sum", (req, res) => {
 // GET SPECIFIC
 router.get("/get/:orderid", (req, res) => {
     connection.query(`SELECT * FROM orders WHERE order_id = ${req.params.orderid};`, (err, result) => {
-        if(err) {
+        if (err) {
             throw err;
         } else {
             res.json(result).status(200).end();

@@ -12,6 +12,7 @@
     "bootstrap": "^4.4.1",
     "bootstrap-sass": "^3.4.1",
     "font-awesome": "^4.7.0",
+    "moment": "^2.25.3",
     "react": "^16.12.0",
     "react-bootstrap": "^1.0.0-beta.16",
     "react-bs-datatable": "^2.1.0",
