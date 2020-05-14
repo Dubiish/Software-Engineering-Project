@@ -5,6 +5,8 @@ import Order from "./components/order/Order.js";
 import Default from "./components/Default";
 import NewCustomer from "./components/customer/NewCustomer.js";
 import NewOrder from "./components/order/NewOrder.js"
+import Login from "./components/Login"
+import User from "./components/user/User"
 
 class App extends React.Component {
 
@@ -27,6 +29,12 @@ class App extends React.Component {
                     </Route>
                     <Route path="/order">
                         <Order api={this.state.api} />
+                    </Route>
+                    <Route path="/login">
+                        <Login />
+                    </Route>
+                    <Route path="/user">
+                        <User api={this.state.api} />
                     </Route>
                     <Route path="/">
                         <Default api={this.state.api} />

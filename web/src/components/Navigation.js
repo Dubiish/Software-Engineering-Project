@@ -14,7 +14,7 @@ function Navigation() {
                     <Nav.Link href="/">Dashboard</Nav.Link>
                     <Nav.Link href="/customer">Customers</Nav.Link>
                     <Nav.Link href="/order">Orders</Nav.Link>
-                    <Nav.Link href="/users" disabled>Users</Nav.Link>
+                    <Nav.Link href="/user">Users</Nav.Link>
                     <NavDropdown title="Settings" id="dropdown-settings">
                         <NavDropdown.Item href="/backup" disabled>Backup</NavDropdown.Item>
                         <NavDropdown.Item href="/logs" disabled>Logs</NavDropdown.Item>
@@ -43,7 +43,7 @@ function Navigation() {
                     <a href="/" className="ml-1">
                         Lukáš Solvar
                     </a>
-                    <Button variant="info" size="sm" className="ml-3" disabled>
+                    <Button href="/login" variant="info" size="sm" className="ml-3 text-light">
                         Log out
                     </Button>
                 </Navbar.Text>

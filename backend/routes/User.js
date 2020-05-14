@@ -25,15 +25,11 @@ router.post("/add", (req, res) => {
 
 // GET ALL USERS
 router.get("/get/all", (req, res) => {
-    console.log("Getting all user data");
-    connection.query(`SELECT user_id, user_name, status FROM users;`, (err, result) => {
+    connection.query(`SELECT user_id, user_name, status, gender FROM users;`, (err, result) => {
         if (err) {
-            console.log(err);
-            res.status(404).end();
+            throw err
         } else {
-            res.status(200);
-            res.json(result);
-            res.end();
+            res.json(result).status(200).end();
         }
     });
 });
