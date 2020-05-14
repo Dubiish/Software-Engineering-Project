@@ -12,8 +12,8 @@ Project for software engineering class
 - Application can be divided into 2 parts
     - Front-end
     - Back-end
-- For front-end -> **React.js** framework with CSS framework **Materialize**
-- For back-end -> **Node.js** servers with **Express.js** framework
+- For front-end -> **React.js** framework with CSS framework **Bootstrap**
+- For back-end -> **Node.js** server with **Express.js** framework
 - For data storage -> **MySQL** database
 
 ## Languages Used
