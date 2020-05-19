@@ -64,7 +64,7 @@ class User extends React.Component {
                 <Navbar bg="secondary" size="small">
                     <Navbar.Brand className="text-light">Users</Navbar.Brand>
                     <Nav className="mr-auto">
-                        <Button variant="info" href="/user/new" disabled>New user</Button>
+                        <Button variant="info" href="/user/new">New user</Button>
                     </Nav>
                 </Navbar>
                 <Row className="mt-3">
@@ -80,7 +80,7 @@ class User extends React.Component {
                         {
                             this.state.users.map((user) => {
                                 return(
-                                    <Card className="mt-2 ml-2 btn-light text-dark" style={{width: "14rem"}}>
+                                    <Card className="mt-2 ml-2 btn-light text-dark" lg={{span:3}} style={{width: "14rem"}}>
                                         <Card.Img variant="top" src={require(`../../resources/avatar_${user.gender === 1 ? "f" : "m"}${Math.floor(Math.random() * 4) + 1}.png`)} />
                                         <Card.Body className="text-center">
                                             <Card.Title>{`[${user.id}] ${user.name}`}</Card.Title>
@@ -90,10 +90,12 @@ class User extends React.Component {
                             })
                         }
                         <Card className="mt-2 ml-2 btn btn-light" style={{width: "14rem"}}>
-                            <Card.Img variant="top" src={require(`../../resources/add_new.png`)} />
-                            <Card.Body>
-                                <Card.Title className="text-center">New User</Card.Title>
-                            </Card.Body>
+                            <a href="/user/new" className="text-dark">
+                                <Card.Img variant="top" src={require(`../../resources/add_new.png`)} />
+                                <Card.Body>
+                                    <Card.Title className="text-center">New User</Card.Title>
+                                </Card.Body>
+                            </a>
                         </Card>
                     </Row>
                 </Container>

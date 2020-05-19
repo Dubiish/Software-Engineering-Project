@@ -12,9 +12,9 @@ const crypto = require("crypto")
 // ADD USER
 router.post("/add", (req, res) => {
     let hash = crypto.createHash("sha256");
-    hash = hash.update(req.query.password);
+    hash = hash.update(req.body.password);
     hash = hash.digest("hex");
-    connection.query(`INSERT INTO users (user_name, user_password, status) VALUES ("${req.query.name}", "${hash}", "${req.query.status}")`, (err) => {
+    connection.query(`INSERT INTO users (user_name, user_password, status, gender) VALUES ("${req.body.username}", "${hash}", ${req.body.status}, ${req.body.gender})`, (err) => {
         if (err) {
             res.status(404).end();
         } else {

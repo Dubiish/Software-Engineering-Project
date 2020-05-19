@@ -7,6 +7,7 @@ import NewCustomer from "./components/customer/NewCustomer.js";
 import NewOrder from "./components/order/NewOrder.js"
 import Login from "./components/Login"
 import User from "./components/user/User"
+import NewUser from "./components/user/NewUser"
 
 class App extends React.Component {
 
@@ -32,6 +33,9 @@ class App extends React.Component {
                     </Route>
                     <Route path="/login">
                         <Login />
+                    </Route>
+                    <Route path="/user/new">
+                        <NewUser api={this.state.api} />
                     </Route>
                     <Route path="/user">
                         <User api={this.state.api} />
